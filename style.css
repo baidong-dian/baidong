@@ -1,0 +1,690 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+body {
+    background: #c8d4e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+}
+
+.main-container {
+    display: flex;
+    width: 100%;
+    max-width: 960px;
+    height: 660px;
+    background: #f0f4fa;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+/* ===== 侧边栏 ===== */
+.sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: #e8eef6;
+    border-right: 1px solid #d0dae8;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.sidebar-header {
+    padding: 16px 18px 12px 18px;
+    border-bottom: 1px solid #d0dae8;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-logo-placeholder {
+    width: 28px;
+    height: 28px;
+    background: #3b8cff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a2634;
+    letter-spacing: 0.3px;
+}
+
+.sidebar-search {
+    padding: 10px 18px;
+    border-bottom: 1px solid #d0dae8;
+}
+
+.sidebar-search-input {
+    width: 100%;
+    padding: 6px 12px;
+    border: 1px solid #d0dae8;
+    border-radius: 4px;
+    background: #f5f8fc;
+    font-size: 13px;
+    color: #1a2634;
+    outline: none;
+}
+
+.sidebar-search-input:focus {
+    border-color: #3b8cff;
+}
+
+.sidebar-menu {
+    flex: 1;
+    padding: 6px 0;
+    overflow-y: auto;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 9px 18px;
+    cursor: pointer;
+    color: #2a3a4e;
+    font-size: 14px;
+    transition: background 0.1s;
+    position: relative;
+}
+
+.menu-item:hover {
+    background: #dce6f4;
+}
+
+.menu-item.active {
+    background: #d0def0;
+    color: #1a2634;
+    font-weight: 500;
+}
+
+.menu-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #3b8cff;
+}
+
+.menu-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    background: #8a9aaa;
+}
+
+.menu-item.active .menu-icon {
+    background: #3b8cff;
+}
+
+.icon-home .menu-icon { background: #3b8cff; }
+.icon-device .menu-icon { background: #5a8ab5; }
+.icon-sd .menu-icon { background: #f5c542; }
+.icon-usb .menu-icon { background: #6ab04c; }
+.icon-image .menu-icon { background: #9b59b6; }
+.icon-music .menu-icon { background: #e67e22; }
+.icon-video .menu-icon { background: #e74c3c; }
+.icon-document .menu-icon { background: #3498db; }
+.icon-apk .menu-icon { background: #3b8cff; }
+.icon-zip .menu-icon { background: #f39c12; }
+.icon-download .menu-icon { background: #2ecc71; }
+.icon-favorite .menu-icon { background: #e74c3c; }
+.icon-setting .menu-icon { background: #7f8fa6; }
+.icon-about .menu-icon { background: #95a5a6; }
+
+.menu-text {
+    flex: 1;
+}
+
+.menu-badge {
+    font-size: 11px;
+    color: #5a6a7e;
+    background: #dce4ee;
+    padding: 1px 10px;
+    border-radius: 10px;
+    font-weight: 400;
+}
+
+.menu-item.active .menu-badge {
+    background: #c0d0e6;
+}
+
+.menu-divider {
+    height: 1px;
+    background: #d0dae8;
+    margin: 4px 18px;
+}
+
+.sidebar-footer {
+    border-top: 1px solid #d0dae8;
+    padding: 4px 0;
+}
+
+/* ===== 内容区 ===== */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f8fc;
+    min-width: 0;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #eaf0f8;
+    border-bottom: 1px solid #d0dae8;
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.top-logo-placeholder {
+    width: 24px;
+    height: 24px;
+    background: #3b8cff;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.brand-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a2634;
+}
+
+.brand-version {
+    font-size: 12px;
+    color: #5a6a7e;
+    background: #dce4ee;
+    padding: 1px 10px;
+    border-radius: 10px;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.top-btn {
+    font-size: 13px;
+    color: #4a5a6e;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+.top-btn:hover {
+    background: #dce6f4;
+    color: #1a2634;
+}
+
+.path-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 16px;
+    background: #f0f4fa;
+    border-bottom: 1px solid #dce4ee;
+    font-size: 13px;
+    color: #3a4a5e;
+}
+
+.path-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1px;
+}
+
+.path-icon {
+    width: 16px;
+    height: 16px;
+    background: #3b8cff;
+    border-radius: 3px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.path-seg {
+    color: #2a3a4e;
+}
+
+.path-seg.current {
+    color: #3b8cff;
+    font-weight: 500;
+}
+
+.path-sep {
+    color: #8a9aaa;
+    margin: 0 3px;
+}
+
+.path-right {
+    display: flex;
+    gap: 12px;
+}
+
+.path-action {
+    font-size: 12px;
+    color: #5a6a7e;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.path-action:hover {
+    background: #dce6f4;
+    color: #3b8cff;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    padding: 4px 14px;
+    background: #f5f8fc;
+    border-bottom: 1px solid #eaf0f6;
+    gap: 2px;
+    flex-wrap: wrap;
+    min-height: 36px;
+}
+
+.tool-btn {
+    background: transparent;
+    border: none;
+    padding: 4px 12px;
+    font-size: 13px;
+    color: #3a4a5e;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.tool-btn:hover {
+    background: #eaf1fa;
+    color: #1a2634;
+}
+
+.tool-btn-primary {
+    background: #3b8cff;
+    color: #ffffff;
+}
+
+.tool-btn-primary:hover {
+    background: #2a7ae8;
+    color: #ffffff;
+}
+
+.toolbar-spacer {
+    flex: 1;
+}
+
+.file-list {
+    flex: 1;
+    padding: 2px 0;
+    overflow-y: auto;
+    background: #f7faff;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-bottom: 1px solid #eaf0f6;
+    transition: background 0.1s;
+    cursor: pointer;
+}
+
+.file-item:hover {
+    background: #eaf1fa;
+}
+
+.file-item.parent-item {
+    opacity: 0.65;
+}
+
+.file-item.apk-item {
+    background: #eef5ff;
+}
+
+.file-item.apk-item:hover {
+    background: #e3edfe;
+}
+
+.file-item.doc-item:hover {
+    background: #ecf4f0;
+}
+
+.file-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+
+.parent-icon {
+    background: #b0c0d0;
+}
+
+.apk-icon {
+    background: #3b8cff;
+}
+
+.doc-icon {
+    background: #3498db;
+}
+
+.file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #1a2a3e;
+}
+
+.file-name.apk-name {
+    color: #2a6fd4;
+    font-weight: 500;
+}
+
+.file-meta {
+    font-size: 12px;
+    color: #6a7a8e;
+    margin-top: 1px;
+}
+
+.file-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.file-action {
+    font-size: 12px;
+    color: #5a7a9e;
+    padding: 2px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.file-action:hover {
+    background: #d0def0;
+    color: #1a2634;
+}
+
+.file-action-download {
+    background: #3b8cff;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.file-action-download:hover {
+    background: #2a7ae8;
+    color: #ffffff;
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 16px;
+    background: #eaf0f8;
+    border-top: 1px solid #d0dae8;
+    font-size: 12px;
+    color: #5a6a7e;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.status-left, .status-center, .status-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-divider {
+    color: #b0c0d0;
+}
+
+.status-item {
+    color: #4a5a6e;
+}
+
+.status-right .status-item:last-child {
+    color: #3b8cff;
+}
+
+/* ===== 对话框 ===== */
+.dialog-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.45);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog-overlay.active {
+    display: flex;
+}
+
+.dialog-box {
+    background: #f5f8fc;
+    border-radius: 10px;
+    width: 380px;
+    max-width: 90%;
+    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background: #eaf0f8;
+    border-bottom: 1px solid #d0dae8;
+}
+
+.dialog-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a2634;
+}
+
+.dialog-close {
+    width: 22px;
+    height: 22px;
+    background: #b0c0d0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dialog-close:hover {
+    background: #e74c3c;
+}
+
+.dialog-body {
+    padding: 20px 24px;
+}
+
+.dialog-body p {
+    font-size: 15px;
+    color: #1a2a3e;
+}
+
+.dialog-sub {
+    font-size: 13px;
+    color: #6a7a8e;
+    margin-top: 6px;
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 20px 16px 20px;
+    border-top: 1px solid #eaf0f6;
+}
+
+.dialog-btn {
+    padding: 7px 24px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dialog-btn-cancel {
+    background: #dce4ee;
+    color: #3a4a5e;
+}
+
+.dialog-btn-cancel:hover {
+    background: #d0dae8;
+}
+
+.dialog-btn-confirm {
+    background: #3b8cff;
+    color: #ffffff;
+}
+
+.dialog-btn-confirm:hover {
+    background: #2a7ae8;
+}
+
+/* ===== 滚动条 ===== */
+.file-list::-webkit-scrollbar,
+.sidebar-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.file-list::-webkit-scrollbar-track,
+.sidebar-menu::-webkit-scrollbar-track {
+    background: #eaf0f8;
+}
+
+.file-list::-webkit-scrollbar-thumb,
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: #b0c0d0;
+    border-radius: 2px;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 820px) {
+    body {
+        padding: 0;
+    }
+    .main-container {
+        height: 100vh;
+        border-radius: 0;
+        max-width: 100%;
+    }
+    .sidebar {
+        width: 200px;
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .toolbar {
+        gap: 1px;
+        padding: 3px 8px;
+    }
+    .tool-btn {
+        padding: 3px 8px;
+        font-size: 12px;
+    }
+    .file-item {
+        padding: 5px 10px;
+    }
+    .file-actions {
+        gap: 2px;
+    }
+    .file-action {
+        font-size: 11px;
+        padding: 1px 8px;
+    }
+    .status-bar {
+        font-size: 11px;
+        padding: 4px 10px;
+        justify-content: center;
+    }
+    .status-left, .status-center, .status-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .top-btn {
+        font-size: 12px;
+        padding: 2px 6px;
+    }
+    .brand-text {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 160px !important;
+        min-width: 160px !important;
+    }
+    .brand-name {
+        font-size: 15px;
+    }
+    .menu-item {
+        padding: 7px 12px;
+        font-size: 13px;
+    }
+    .menu-badge {
+        display: none;
+    }
+    .file-action {
+        font-size: 10px;
+        padding: 1px 6px;
+    }
+    .file-name {
+        font-size: 13px;
+    }
+    .file-meta {
+        font-size: 11px;
+    }
+}
