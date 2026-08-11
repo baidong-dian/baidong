@@ -1,0 +1,8 @@
+{
+  "name": "baidong",
+  "version": "1.0.0",
+  "description": "自动生成文件列表",
+  "scripts": {
+    "build": "node build.js"
+  }
+}
