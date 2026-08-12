@@ -1,0 +1,489 @@
+/* ============================================================
+   Baidong 下载页样式表
+   文件路径：Baidong-site/css/style.css
+   设计风格：参考 mt2.cn（MT 管理器）—— 暗色背景 + 橙色强调色
+   ============================================================ */
+
+/* ---------- 全局 CSS 变量（集中管理主题色） ---------- */
+:root {
+  --bg: #0e1116;              /* 页面整体背景（深色） */
+  --bg-deep: #0a0c10;         /* 更深一层的背景（页脚用） */
+  --surface: #1b2029;         /* 卡片背景色 */
+  --surface-hover: #222936;   /* 卡片悬停色 */
+  --border: #2a3140;          /* 边框颜色 */
+  --accent: #ff8c1a;          /* 强调色：MT 管理器标志性橙色 */
+  --accent-2: #ffb45c;        /* 强调色浅色（渐变高光） */
+  --text: #e8eaf0;            /* 主文字颜色 */
+  --text-sub: #9aa3b2;        /* 次级文字颜色 */
+  --radius: 14px;             /* 通用圆角 */
+  --nav-h: 60px;              /* 顶部导航栏高度 */
+}
+
+/* ---------- 基础重置 ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;    /* 锚点导航平滑滚动 */
+}
+
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;         /* 防止风车叶片超出宽度时产生横向滚动条 */
+}
+
+/* ============================================================
+   背景风车层：4 台手机组成的风车，固定在视口中央
+   ============================================================ */
+.windmill-stage {
+  position: fixed;            /* 固定在整个视口 */
+  inset: 0;
+  z-index: 0;                 /* 位于内容层（z-index:1）之下 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;       /* 不阻挡任何点击 / 文字选择 */
+}
+
+/* 风车容器：尺寸为 0x0，仅作为旋转轴心。
+   JS 会实时改写它的 transform: rotate(...)，实现随滚动旋转 */
+.windmill {
+  position: relative;
+  width: 0;
+  height: 0;
+  --wm-r: 315px;              /* 风车叶片半径（手机中心到轴心的距离） */
+  will-change: transform;     /* 提示浏览器做 GPU 合成，旋转更流畅 */
+}
+
+/* 风车中心轴（橙色圆点装饰） */
+.windmill::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 46px;
+  height: 46px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-2), var(--accent));
+  box-shadow: 0 0 34px rgba(255, 140, 26, 0.55);
+  z-index: 3;
+}
+
+/* ---------- 手机机身（CSS 绘制的手机模型，无需外部图片） ---------- */
+.phone {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 170px;
+  height: 340px;
+  border-radius: 30px;
+  background: linear-gradient(145deg, #242b37, #151a22);  /* 金属机身 */
+  border: 1px solid #333b4a;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.55),
+    0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+/* 手机屏幕 */
+.phone-screen {
+  position: absolute;
+  left: 9px;
+  top: 9px;
+  right: 9px;
+  bottom: 9px;
+  border-radius: 23px;
+  overflow: hidden;
+}
+
+/* 每台手机屏幕内的 App 图标块（用 "B" 字母装饰） */
+.phone-screen::after {
+  content: "B";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(255, 140, 26, 0.45);
+}
+
+/* 4 台手机不同配色的屏幕渐变 */
+.phone-screen-1 { background: linear-gradient(160deg, #2b3a55, #17202e); }
+.phone-screen-2 { background: linear-gradient(160deg, #4a3a63, #221a33); }
+.phone-screen-3 { background: linear-gradient(160deg, #1f4d46, #0f2623); }
+.phone-screen-4 { background: linear-gradient(160deg, #5a3a2e, #2a1810); }
+
+/* 手机顶部听筒/刘海装饰条 */
+.phone-notch {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  width: 74px;
+  height: 10px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #0b0e13;
+  z-index: 2;
+}
+
+/* ---------- 4 台手机的风车（叶片）布局 ----------
+   先把手机中心对准轴心，再沿对应方向推出半径距离；
+   translate(-50%, -50%) 以手机自身尺寸为参照，把中心点对齐到轴心 */
+.phone-1 { transform: translate(-50%, -50%) translate(0, calc(0px - var(--wm-r))) rotate(0deg); }      /* 上方叶片 */
+.phone-2 { transform: translate(-50%, -50%) translate(var(--wm-r), 0) rotate(90deg); }                /* 右侧叶片 */
+.phone-3 { transform: translate(-50%, -50%) translate(0, var(--wm-r)) rotate(180deg); }               /* 下方叶片 */
+.phone-4 { transform: translate(-50%, -50%) translate(calc(0px - var(--wm-r)), 0) rotate(270deg); }   /* 左侧叶片 */
+
+/* ============================================================
+   页面主体内容（z-index:1，叠在风车层之上）
+   ============================================================ */
+.page-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- 顶部导航栏（MT Manager 顶栏风格：半透明毛玻璃） ---------- */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  background: rgba(14, 17, 22, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(42, 49, 64, 0.6);
+}
+
+.nav-inner {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* 顶栏只放文字 Logo，不放 App 图标 */
+.nav-logo {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: var(--text-sub);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+
+/* ---------- 通用按钮（橙色渐变胶囊，MT Manager 风格） ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 12px 26px;
+  color: #1a1106;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  box-shadow: 0 10px 24px rgba(255, 140, 26, 0.32);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(255, 140, 26, 0.45);
+}
+
+.btn:active { transform: translateY(0); }
+
+/* 导航栏内的小号按钮 */
+.btn-nav {
+  padding: 8px 18px;
+  font-size: 13px;
+}
+
+/* ---------- 首屏 Hero（背景透明，露出风车） ---------- */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* 渐变蒙层：上方较透明（露出风车），向底部加深过渡到正文区 */
+  background: linear-gradient(
+    180deg,
+    rgba(14, 17, 22, 0.20) 0%,
+    rgba(14, 17, 22, 0.42) 55%,
+    rgba(14, 17, 22, 0.92) 100%
+  );
+  padding: calc(var(--nav-h) + 40px) 20px 80px;
+}
+
+/* Hero 中的 App 图标（主体内容区，非顶栏） */
+.hero-icon {
+  width: 128px;
+  height: 128px;
+  margin: 0 auto 24px;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow:
+    0 24px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 6px rgba(255, 140, 26, 0.12);
+}
+
+.hero-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* 保持比例铺满，正方形图标最佳 */
+  display: block;
+}
+
+.hero h1 {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.hero-slogan {
+  color: var(--accent);
+  font-size: 18px;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.hero-tip {
+  color: var(--text-sub);
+  font-size: 13px;
+  margin-top: 14px;
+  margin-bottom: 28px;
+}
+
+/* ---------- 正文区块（半透明深色底，保证文字可读） ---------- */
+.section {
+  background: rgba(15, 18, 24, 0.94);
+  border-top: 1px solid rgba(42, 49, 64, 0.6);
+  padding: 72px 20px;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+/* 区块标题：左侧带橙色竖条装饰 */
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  position: relative;
+  padding-left: 14px;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 4px;
+  border-radius: 4px;
+  background: var(--accent);
+}
+
+/* ---------- 应用信息卡片（MT Manager 展示应用包图标的样式） ---------- */
+.app-card {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: transform 0.25s, border-color 0.25s;
+}
+
+.app-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 140, 26, 0.5);
+}
+
+/* 卡片左侧的大号 App 图标 */
+.app-card-icon {
+  width: 132px;
+  height: 132px;
+  flex: 0 0 auto;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+  background: #141920;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+}
+
+.app-card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.app-card-info h3 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.app-pkg {
+  color: var(--text-sub);
+  margin-top: 4px;
+  font-size: 13px;
+  font-family: Consolas, "Courier New", monospace;
+}
+
+/* 版本 / 大小 / 系统 等元信息胶囊 */
+.app-meta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.app-meta span {
+  background: #10141b;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+.app-desc {
+  color: var(--text-sub);
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 14px;
+  max-width: 620px;
+}
+
+.app-card-info .btn {
+  margin-top: 20px;
+}
+
+/* 下载结果提示文字 */
+.download-tip {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--accent);
+  min-height: 18px;
+}
+
+/* ---------- 功能特性网格 ---------- */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  transition: transform 0.25s, border-color 0.25s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 140, 26, 0.5);
+}
+
+.feature-card h4 {
+  color: var(--accent);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.feature-card p {
+  color: var(--text-sub);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ---------- 关于 ---------- */
+.about-section p {
+  color: var(--text-sub);
+  line-height: 1.9;
+  max-width: 720px;
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border);
+  padding: 26px 20px;
+  text-align: center;
+  color: var(--text-sub);
+  font-size: 13px;
+}
+
+/* ============================================================
+   响应式适配
+   ============================================================ */
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .app-card { flex-direction: column; text-align: center; }
+  .app-card-icon { width: 110px; height: 110px; }
+  .hero h1 { font-size: 44px; }
+  .app-meta { justify-content: center; }
+}
+
+@media (max-width: 760px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }                 /* 窄屏隐藏导航链接 */
+  .nav-inner { justify-content: space-between; }
+  /* 缩小风车叶片与手机尺寸，适配小屏 */
+  .windmill { --wm-r: 205px; }
+  .phone { width: 128px; height: 256px; }
+  .phone-screen { border-radius: 18px; }
+  .phone-notch { width: 54px; height: 8px; top: 12px; }
+}
+
+@media (max-width: 480px) {
+  /* 超窄屏直接隐藏背景风车，保证内容干净 */
+  .windmill-stage { display: none; }
+  .hero h1 { font-size: 36px; }
+  .section { padding: 48px 16px; }
+}
